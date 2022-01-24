@@ -65,3 +65,6 @@ $route['auth/email/verify']['post'] = 'auth/emailVerify';
 $route['user/products']['get'] = 'user/productList';
 
 $route['admin/dashboard']['get'] = 'admin/dashboard';
+$route['admin/product']['post'] = 'admin/storeProduct';
+$route['admin/product/update']['post'] = 'admin/updateProduct';
+$route['admin/product/delete']['post'] = 'admin/deleteProduct';

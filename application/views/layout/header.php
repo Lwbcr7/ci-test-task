@@ -17,6 +17,10 @@
     <link href="/inspinia/css/animate.css" rel="stylesheet">
     <link href="/inspinia/css/style.css" rel="stylesheet">
 
+    <!-- Sweet Alert -->
+    <link href="/inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <script src="/inspinia/js/plugins/sweetalert/sweetalert.min.js"></script>
+
     <style type="text/css">
         #page-wrapper {
             padding: 0;
