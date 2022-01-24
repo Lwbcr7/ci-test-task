@@ -15,6 +15,7 @@
                     <div class="panel-body">
                         <button v-on:click="toggleCurdModal(null)" class="btn btn-w-m btn-success">Create Product</button>
                         <hr>
+                        <template v-if="products.length > 0">
                         <div class="row">
                             <div v-for="(product, index) in products" class="col-sm-4">
                                 <div class="ibox" style="margin-bottom: 10px; border: 1px solid #eee;">
@@ -31,6 +32,12 @@
                                 </div>
                             </div>
                         </div>
+                        </template>
+                        <template v-else>
+                            <div style="width: 100%; min-height: 20vh; position: relative;">
+                                <p style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">No products yet...</p>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -85,7 +92,7 @@
                     <button v-on:click="toggleCurdModal(null)" type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                     <button v-on:click="submitCreate" v-if="target.id == 0" type="button" class="btn btn-primary ladda-button" data-style="zoom-in">Submit</button>
                     <button v-on:click="submitUpdate" v-else type="button" class="btn btn-primary ladda-button" data-style="zoom-in">Save changes</button>
-                    <p v-if="error.length > 0" class="text-danger">{{ error }}</p>
+                    <p v-if="error.length > 0" class="text-danger m-t">{{ error }}</p>
                 </div>
             </div>
         </div>

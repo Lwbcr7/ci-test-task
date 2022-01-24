@@ -26,6 +26,8 @@ class Admin extends Base
         ];
         $viewData['products'] = $this->product_model->all();
 
+        !is_dir('./uploads') && mkdir('./uploads');
+
         $this->load->view('layout/header');
         $this->load->view('admin/dashboard', $viewData);
         $this->load->view('layout/footer');
