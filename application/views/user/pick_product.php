@@ -12,8 +12,12 @@
             <div class="col-sm-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Product List</div>
-                    <div class="panel-body" style="min-height: 80vh;">
+                    <div class="panel-body" style="min-height: 80vh; position: relative; padding: 10px;">
                         <div class="row">
+                            <template v-if="products.length == 0">
+                                <p style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">No available products yet...</p>
+                            </template>
+                            <template v-else>
                             <div v-for="(product, index) in products" class="col-sm-4">
                                 <div class="ibox" style="margin-bottom: 10px; border: 1px solid #eee;">
                                     <div class="ibox-title">
@@ -32,6 +36,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </template>
                         </div>
                     </div>
                 </div>
