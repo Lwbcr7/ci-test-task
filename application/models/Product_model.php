@@ -21,7 +21,26 @@ class Product_model extends CI_model
     public function all()
     {
         $query = $this->db->get('products');
+
         return $query->result_array();
+    }
+
+    public function allPublish()
+    {
+        $this->db->where('status', 'publish');
+
+        return $this->db->get('products')->result_array();
+    }
+
+    public function pickedByUserID($userID)
+    {
+        $this->db->select('products.id, title, image, description, status, price, count');
+        $this->db->from('products');
+        $this->db->join('user_product_relation', 'products.id = user_product_relation.product_id', 'left');
+        $this->db->where('user_product_relation.user_id =', $userID);
+        $this->db->where('user_product_relation.product_id is not NULL');
+
+        return $this->db->get()->result_array();
     }
 
     public function getByID($id)

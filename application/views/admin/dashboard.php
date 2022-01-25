@@ -275,6 +275,7 @@ var main = new Vue({
                 ,title: ''
                 ,text: 'Are you sure to delete this product?'
                 ,showCancelButton: true
+                // ,closeOnConfirm: false
             }, function() {
                 $.ajax({
                     type: 'POST'

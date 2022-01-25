@@ -63,6 +63,8 @@ $route['auth/logout']['get'] = 'auth/logout';
 $route['auth/email/verify']['post'] = 'auth/emailVerify';
 
 $route['user/products']['get'] = 'user/productList';
+$route['user/product/pick']['post'] = 'user/pickProduct';
+$route['user/product/unpick']['post'] = 'user/unpickProduct';
 
 $route['admin/dashboard']['get'] = 'admin/dashboard';
 $route['admin/product']['post'] = 'admin/storeProduct';
