@@ -9,18 +9,92 @@
                     </div>
                 </template>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-4">
+                <div class="panel panel-success">
+                    <div class="panel-heading" style="position: relative;">
+                        Data
+                        <select v-model="currency" class="form-control" style="color: black; width: 100px; position: absolute; right: 5px; top: 50%; transform: translateY(-50%);">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="RON">RON</option>
+                        </select>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="ibox" style="border: 1px solid #eee;">
+                                    <div class="ibox-title">Active and verified users</div>
+                                    <div class="ibox-content text-center font-bold" style="font-size: 24px;"><?php echo $data['users']; ?></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ibox" style="border: 1px solid #eee;">
+                                    <div class="ibox-title">Users who have attached products</div>
+                                    <div class="ibox-content text-center font-bold" style="font-size: 24px;"><?php echo $data['attached_product_users']; ?></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ibox" style="border: 1px solid #eee;">
+                                    <div class="ibox-title">Active Products</div>
+                                    <div class="ibox-content text-center font-bold" style="font-size: 24px;"><?php echo $data['products']; ?></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ibox" style="border: 1px solid #eee;">
+                                    <div class="ibox-title">Unattached Products</div>
+                                    <div class="ibox-content text-center font-bold" style="font-size: 24px;"><?php echo $data['unattached_products']; ?></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ibox" style="border: 1px solid #eee;">
+                                    <div class="ibox-title">Total Attached Products</div>
+                                    <div class="ibox-content text-center font-bold" style="font-size: 24px;"><?php echo $data['attached_products']; ?></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ibox" style="border: 1px solid #eee;">
+                                    <div class="ibox-title" style="position: relative;">
+                                        Total Price
+                                    </div>
+                                    <div class="ibox-content text-center font-bold" style="font-size: 24px;">
+                                        <font>{{ currencySymbol }}</font> {{ displayTotalPrice }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="ibox" style="border: 1px solid #eee;">
+                                    <div class="ibox-title" style="position: relative;">
+                                        Detail Price
+                                    </div>
+                                    <div class="ibox-content font-bold">
+                                        <template v-if="priceDetail.length == 0">
+                                            <p>No details yet...</p>
+                                        </template>
+                                        <template v-else>
+                                            <p v-for="(data, userID) in priceDetail" class="m-b-none">UserID:{{ data.id }} - Name:{{ data.name }} => <font>{{ currencySymbol }}</font> {{ parseFloat(data.total).toFixed(2) }}</p>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Products</div>
                     <div class="panel-body">
-                        <button v-on:click="toggleCurdModal(null)" class="btn btn-w-m btn-success">Create Product</button>
+                        <button v-on:click="toggleCurdModal(null)" class="btn btn-w-m btn-primary">Create Product</button>
                         <hr>
                         <template v-if="products.length > 0">
                         <div class="row">
                             <div v-for="(product, index) in products" class="col-sm-4">
                                 <div class="ibox" style="margin-bottom: 10px; border: 1px solid #eee;">
                                     <div class="ibox-title">
-                                        {{ product.title }}
+                                        <div class="pull-left">
+                                            <span v-if="product.status == 'publish'" class="badge badge-primary">Publish</span>
+                                            <span v-else class="badge">Draft</span>
+                                        </div>
                                         <div class="pull-right">
                                             <button v-on:click="toggleCurdModal(product)" class="btn btn-info btn-xs">Edit</button>
                                             <button v-on:click="deleteProduct(product.id)" class="btn btn-danger btn-xs">Delete</button>
@@ -28,6 +102,7 @@
                                     </div>
                                     <div class="ibox-content">
                                         <div v-bind:style="{'background-image': 'url('+product.image+')'}" style="width: 100%; height: 200px; background-size: contain !important; background-position: 50% !important; background-repeat: no-repeat; cursor: pointer;"></div>
+                                        <p class="m-t m-b-none text-2line" style="min-height: 38px;">Title: {{ product.title }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -35,7 +110,7 @@
                         </template>
                         <template v-else>
                             <div style="width: 100%; min-height: 20vh; position: relative;">
-                                <p style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">No products yet...</p>
+                                <p class="m-b-none" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">No products yet...</p>
                             </div>
                         </template>
                     </div>
@@ -105,6 +180,11 @@ var main = new Vue({
     el: '#wrapper'
     ,data: {
         currentUser: <?php echo $user ? json_encode($user) : null; ?>
+        ,currency: 'USD'
+        ,exchangeRates: {}
+        ,currentRate: 1
+        ,totalPrice: <?php echo $data['total_price']; ?>
+        ,priceDetail: <?php echo json_encode($data['detail_price']); ?>
         ,products: <?php echo json_encode($products); ?>
         ,showCurdModal: false
 
@@ -121,12 +201,73 @@ var main = new Vue({
         ,file: null
         ,preview: ''
     }
+    ,created: function() {
+        self = this;
+        $.ajax({
+            type: 'GET'
+            ,url: 'http://api.exchangeratesapi.io/v1/latest?access_key=19b21389c0494af28c7238531fd35802'
+            ,dataType: 'json'
+            ,data: {}
+            ,success: function(response) {
+                if (response.success == true) {
+                    self.exchangeRates = response.rates;
+                }
+            }
+        });
+    }
     ,computed: {
         displayCurdModal: function() {
             return this.showCurdModal ? 'block' : 'none';
         }
+        ,currencySymbol: function() {
+            if (this.currency == 'USD') {
+                // this.currentRate = 1;
+                return '$';
+            }
+
+            if (this.currency == 'EUR') {
+                // this.currentRate = this.exchangeRates['USD'];
+                return '€';
+            }
+
+            if (this.currency == 'RON') {
+                // this.currentRate = this.exchangeRates['USD'] / this.exchangeRates['RON'];
+                return 'lei';
+            }
+        }
+        ,displayTotalPrice: function() {
+            var total = 0;
+
+            for (var i in this.priceDetail) {
+                total += parseFloat(this.priceDetail[i]['total']);
+            }
+
+            return total.toFixed(2);
+        }
     }
-    ,created: function() {}
+    ,watch: {
+        currency: function() {
+            // console.log('currency change => '+this.currency);
+
+            if (this.currency == 'USD') {
+                this.currentRate = 1;
+            }
+
+            if (this.currency == 'EUR') {
+                this.currentRate = 1 / this.exchangeRates['USD'];
+            }
+
+            if (this.currency == 'RON') {
+                this.currentRate = (1 / this.exchangeRates['USD']) * this.exchangeRates['RON'];
+            }
+
+            // console.log('currency rate => '+this.currentRate);
+
+            for (var i in this.priceDetail) {
+                this.priceDetail[i]['total'] = parseFloat(this.priceDetail[i]['origin'] * this.currentRate).toFixed(2);
+            }
+        }
+    }
     ,methods: {
         toggleCurdModal: function(target) {
             if (this.showCurdModal) {

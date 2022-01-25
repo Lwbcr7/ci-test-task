@@ -77,4 +77,36 @@ class Product_model extends CI_model
         $this->db->where('id', $id);
         $this->db->delete('products');
     }
+
+    public function allUnattached()
+    {
+        $this->db->select('products.id, title, image, description, status, price, count');
+        $this->db->from('products');
+        $this->db->join('user_product_relation', 'products.id = user_product_relation.product_id', 'left');
+        $this->db->where('user_product_relation.user_id is NULL');
+
+        return $this->db->get()->result_array();
+    }
+
+    public function attachedAmount()
+    {
+        $this->db->select('sum(count) as count');
+        $this->db->from('user_product_relation');
+
+        $result = $this->db->get()->row_array();
+
+        return intval($result['count']);
+    }
+
+    public function attachedPrice()
+    {
+        $result = $this->db->get('user_product_relation')->result_array();
+
+        $price = 0;
+        foreach ($result as $key => $value) {
+            $price += $value['price'] * $value['count'];
+        }
+
+        return $price;
+    }
 }

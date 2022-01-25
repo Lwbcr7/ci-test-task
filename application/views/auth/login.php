@@ -11,7 +11,7 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input v-model="password" class="form-control" type="password" name="" maxlength="12">
+                    <input v-on:keyup.enter="submitLogin" v-model="password" class="form-control" type="password" name="" maxlength="12">
                 </div>
                 <div class="text-center m-b">
                     <button v-on:click="submitLogin" class="btn btn-w-m btn-success ladda-button" id="vue-submit-login" data-style="zoom-in">Log Now</button>

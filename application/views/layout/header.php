@@ -26,6 +26,13 @@
             padding: 0;
             margin: 0;
         }
+        .text-2line {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
     </style>
 </head>
 <body>

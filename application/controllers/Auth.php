@@ -3,6 +3,12 @@ require_once(APPPATH . "controllers/Base.php");
 
 class Auth extends Base
 {
+    public function index()
+    {
+        header('Location: /auth/login');
+        die();
+    }
+
     public function registerPage()
     {
         // redirect if logged in
@@ -23,9 +29,9 @@ class Auth extends Base
 
     public function register()
     {
-        $name = $this->input->post('name');
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
+        $name       = $this->input->post('name');
+        $email      = $this->input->post('email');
+        $password   = $this->input->post('password');
 
         if (empty($name) || empty($email) || empty($password)) {
             return $this->responseJson([
@@ -36,8 +42,8 @@ class Auth extends Base
 
         if (!preg_match("/[a-zA-Z0-9_\-\.]+@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})/", $email)) {
             return $this->responseJson([
-                'code' => -2,
-                'message' => 'Invalid email',
+                'code'      => -2,
+                'message'   => 'Invalid email',
             ]);
         }
 
@@ -60,10 +66,10 @@ class Auth extends Base
         $this->setSession('user_role', $user['role']);
 
         return $this->responseJson([
-            'code' => 1,
-            'message' => '',
+            'code'      => 1,
+            'message'   => '',
             'data' => [
-                'redirect' => $user['role'] == 'admin' ? '/admin/dashboard' : '/user/products',
+                'redirect' => ($user['role'] == 'admin') ? '/admin/dashboard' : '/user/products',
             ],
         ]);
     }
@@ -113,8 +119,8 @@ class Auth extends Base
         $this->setSession('user_role', $user['role']);
 
         return $this->responseJson([
-            'code' => 1,
-            'message' => '',
+            'code'      => 1,
+            'message'   => '',
             'data' => [
                 'redirect' => $user['role'] == 'admin' ? '/admin/dashboard' : '/user/products',
             ],
@@ -135,15 +141,15 @@ class Auth extends Base
 
         if (is_null($currentUser)) {
             return $this->responseJson([
-                'code' => -1,
-                'message' => 'There are currently no logged in user',
+                'code'      => -1,
+                'message'   => 'There are currently no logged in user',
             ]);
         }
 
         if ($currentUser['email_is_verified'] == 1) {
             return $this->responseJson([
-                'code' => -2,
-                'message' => 'Email has been verified',
+                'code'      => -2,
+                'message'   => 'Email has been verified',
             ]);
         }
 
@@ -151,9 +157,6 @@ class Auth extends Base
         $this->load->model('user_model');
         $this->user_model->setEmailIsVerified($currentUser['id']);
 
-        return $this->responseJson([
-            'code' => 1,
-            // ...
-        ]);
+        return $this->responseJson(['code' => 1]);
     }
 }

@@ -40,4 +40,10 @@ class User_product_model extends CI_model
         $this->db->where('product_id', $productID);
         $this->db->delete('user_product_relation');
     }
+
+    public function deleteByProductID($productID)
+    {
+        $this->db->where('product_id', $productID);
+        $this->db->delete('user_product_relation');
+    }
 }

@@ -15,7 +15,11 @@
                 </div>
                 <div class="form-group">
                     <label>Password (at least 6 characters)</label>
-                    <input v-model="password" class="form-control" type="password" name="" maxlength="12">
+                    <input v-on:keyup.enter="submitRegister" v-model="password" class="form-control" type="password" name="" maxlength="12">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Your Password</label>
+                    <input v-on:keyup.enter="submitRegister" v-model="password2" class="form-control" type="password" name="" maxlength="12">
                 </div>
                 <div class="text-center m-b">
                     <button v-on:click="submitRegister" class="btn btn-w-m btn-success ladda-button" id="vue-submit-register" data-style="zoom-in">Register Now</button>
@@ -42,6 +46,7 @@ var main = new Vue({
         name: ''
         ,email: ''
         ,password: ''
+        ,password2: ''
         ,error: ''
     }
     ,created: function() {}
@@ -63,6 +68,10 @@ var main = new Vue({
 
             if (this.password.length < 6) {
                 return this.error = 'Password is at least 6 characters';
+            }
+
+            if (this.password2 != this.password) {
+                return this.error = 'The two entered passwords do not match';
             }
 
             self = this;

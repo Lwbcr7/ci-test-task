@@ -1,19 +1,27 @@
 <div id="wrapper">
     <div id="page-wrapper" style="position: relative; min-height: 100vh; padding: 20px;">
         <div class="row">
+            <div class="col-sm-12">
+                <template v-if="currentUser">
+                    <div class="m-b" style="color: white;">
+                        <span>Hi, {{ currentUser.name }}</span>
+                        <a class="pull-right" href="/auth/logout" style="color: white;">Logout</a>
+                    </div>
+                </template>
+            </div>
             <div class="col-sm-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Product List</div>
-                    <div class="panel-body" style="min-height: 90vh;">
+                    <div class="panel-body" style="min-height: 80vh;">
                         <div class="row">
                             <div v-for="(product, index) in products" class="col-sm-4">
                                 <div class="ibox" style="margin-bottom: 10px; border: 1px solid #eee;">
                                     <div class="ibox-title">
-                                        {{ product.title }}
+                                        <p class="text-2line m-b-none" style="min-height: 38px;">{{ product.title }}</p>
                                     </div>
                                     <div class="ibox-content" style="padding: 10px;">
                                         <div v-bind:style="{'background-image': 'url('+product.image+')'}" style="width: 100%; height: 200px; background-size: contain !important; background-position: 50% !important; background-repeat: no-repeat; cursor: pointer;"></div>
-                                        <p class="text-center m-b-none">
+                                        <p class="text-center m-b-none m-t">
                                             <template v-if="!isPicked(product.id)">
                                                 <button v-on:click="togglePickModal(product)" class="btn btn-w-m btn-primary btn-sm">Pick Me</button>
                                             </template>
@@ -31,7 +39,7 @@
             <div class="col-sm-6">
                 <div class="panel panel-success">
                     <div class="panel-heading">Picked Products</div>
-                    <div class="panel-body" style="min-height: 90vh; position: relative; padding: 10px;">
+                    <div class="panel-body" style="min-height: 80vh; position: relative; padding: 10px;">
                         <template v-if="pickedProducts.length == 0">
                             <p style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">No products yet...</p>
                         </template>
@@ -93,7 +101,8 @@
 var main = new Vue({
     el: '#wrapper'
     ,data: {
-        pickedProducts: <?php echo json_encode($pickedProducts); ?>
+        currentUser: <?php echo $user ? json_encode($user) : null; ?>
+        ,pickedProducts: <?php echo json_encode($pickedProducts); ?>
         ,products: <?php echo json_encode($products); ?>
         ,showPickModal: false
 
