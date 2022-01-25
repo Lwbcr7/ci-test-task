@@ -53,6 +53,6 @@ Then change the database config in application/config/database.php:
 
 Configure the server software.
 
-Access path: {your host}/ , and have some fun!
+Access path: {your host}/ , login with email: admin@test.com, password: 123123, and have some fun!
 
 Thank you!
